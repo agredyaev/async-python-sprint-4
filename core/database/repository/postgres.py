@@ -6,13 +6,13 @@ from sqlalchemy import SelectBase
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from core.database.repository.protocol import PostgresRepositoryProtocol
+from core.database.repository.protocol import RepositoryProtocol
 
 T = TypeVar("T", bound=Any)
 P = TypeVar("P", bound=Any)
 
 
-class BaseRepository(PostgresRepositoryProtocol[T, P]):
+class BaseRepository(RepositoryProtocol[T, P]):
     __slots__ = ("session",)
 
     model: type[T]

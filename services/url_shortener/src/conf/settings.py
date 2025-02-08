@@ -86,7 +86,6 @@ class Settings(DefaultSettings):
     jwt: JWTSettings = JWTSettings()
 
 
-
 settings = Settings()
 
 

@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from typing import Annotated, Any
 
-from uuid import UUID  # noqa: TCH003
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, Request
+from schemas.entity import ProductSchema
 from starlette import status
 
-from schemas.entity import ProductSchema
 from services import EntityService, get_entity_service
 
 router = APIRouter()

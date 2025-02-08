@@ -1,6 +1,5 @@
-from fastapi import APIRouter
-
 from api.v1 import auxiliary, healthcheck, order, payment, product
+from fastapi import APIRouter
 
 router = APIRouter()
 router.include_router(healthcheck.router)

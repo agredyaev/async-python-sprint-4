@@ -35,8 +35,7 @@ class UpdatedAtMixin(BaseMixin):
 class UserIdMixin(BaseMixin):
     """Mixin that adds a UUID primary key field to a model."""
 
-    user_id: Mapped[UUID] = mapped_column(
-        ForeignKey(column="user.id", ondelete="CASCADE"), nullable=False)
+    user_id: Mapped[UUID] = mapped_column(ForeignKey(column="user.id", ondelete="CASCADE"), nullable=False)
 
 
 class NameMixin:

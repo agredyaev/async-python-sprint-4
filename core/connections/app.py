@@ -12,7 +12,7 @@ class AppConnectionChecker(BaseConnectionChecker):
 
     async def client(self) -> httpx.AsyncClient:
         if not self._client:
-            self._client = await httpx.AsyncClient()
+            self._client = httpx.AsyncClient()
         return self._client
 
     async def close(self) -> None:
@@ -21,6 +21,6 @@ class AppConnectionChecker(BaseConnectionChecker):
             self._client = None
 
     async def perform_check(self) -> bool:
-        client = await self.client
+        client = await self.client()
         response = await client.get(url=self.url)
         return bool(response.status_code == 200)

@@ -20,4 +20,3 @@ class CoreLogger:
         if not cls._instance:
             cls.setup()
         return logging.getLogger(name)
-

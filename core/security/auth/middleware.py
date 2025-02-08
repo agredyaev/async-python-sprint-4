@@ -15,11 +15,12 @@ from core.security.auth.service import AuthService
 
 class AuthMiddleware(BaseHTTPMiddleware):
     def __init__(
-        self, app: FastAPI,
-            auth_service: AuthService,
-            permission_checker: PermissionChecker,
-            blacklist: list[ipaddress.IPv4Network],
-            api_version: str = "/v1"
+        self,
+        app: FastAPI,
+        auth_service: AuthService,
+        permission_checker: PermissionChecker,
+        blacklist: list[ipaddress.IPv4Network],
+        api_version: str = "/v1",
     ):
         super().__init__(app)
         self.auth_service = auth_service
@@ -47,7 +48,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
 
                 request.state.user = current_user
 
-            except Exception:
+            except Exception:  # noqa: BLE001
                 return self.handle_error(exc=InternalServerError())
 
         return await call_next(request)
@@ -55,4 +56,3 @@ class AuthMiddleware(BaseHTTPMiddleware):
     @staticmethod
     def handle_error(exc: AuthJWTError | PermissionDeniedError | InternalServerError | BlacklistError) -> JSONResponse:
         return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
-

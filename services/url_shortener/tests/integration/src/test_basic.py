@@ -1,4 +1,4 @@
-import requests  # type: ignore # noqa: PGH003
+import requests
 
 from core.settings import settings
 

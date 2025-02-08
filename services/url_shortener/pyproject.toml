@@ -2,6 +2,16 @@
 build-backend = "hatchling.build"
 requires = ["hatchling"]
 
+[dependency-groups]
+test = [
+  "pytest>=8.3.2",
+  "pytest-asyncio>=0.24.0",
+]
+test-functional = []
+test-integration = [
+  "requests>=2.32.3",
+]
+
 [project]
 dependencies = [
   "core",
@@ -22,16 +32,6 @@ name = "url-shortener"
 requires-python = ">=3.12"
 version = "0.1.0"
 
-[dependency-groups]
-test = [
-  "pytest>=8.3.2",
-  "pytest-asyncio>=0.24.0",
-]
-test-functional = []
-test-integration = [
-  "requests>=2.32.3",
-]
-
 [tool.hatch.build.targets.wheel]
 packages = ["services/url_shortener"]
 
@@ -43,4 +43,4 @@ log_cli_format = "%(asctime)s [%(levelname)s] %(message)s (%(filename)s:%(lineno
 log_cli_level = "DEBUG"
 
 [tool.uv.sources]
-core = { workspace = true }
+core = {workspace = true}

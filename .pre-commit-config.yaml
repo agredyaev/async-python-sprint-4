@@ -33,3 +33,4 @@ repos:
     args: [--config-file=pyproject.toml, --install-types, --non-interactive]
     additional_dependencies:
     - pydantic
+    - types-requests

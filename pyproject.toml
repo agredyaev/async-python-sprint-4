@@ -19,7 +19,6 @@ dev = [
 ]
 
 [project]
-
 description = "Async Python sprint 4"
 name = "async-python-sprint-4"
 readme = "README.md"
@@ -157,6 +156,5 @@ allow-magic-value-types = ["int", "str", "bytes"]
 max-args = 10
 max-statements = 25
 
-
 [tool.uv.workspace]
-members = ["core", "services/*"] #https://docs.astral.sh/uv/concepts/projects/workspaces/
+members = ["core", "services/*"]  # https://docs.astral.sh/uv/concepts/projects/workspaces/

@@ -6,11 +6,12 @@ class PermissionsCheck(IntEnum):
     ENABLED = 1
     DISABLED = 0
 
+
 class PermissionChecker:
     def __init__(
         self,
         exempt_endpoints_provider: Callable[[], list[str]],
-        permissions_check: PermissionsCheck = PermissionsCheck.ENABLED
+        permissions_check: PermissionsCheck = PermissionsCheck.ENABLED,
     ):
         self.exempt_endpoints_provider = exempt_endpoints_provider
         self.permissions_enabled = permissions_check
@@ -20,7 +21,4 @@ class PermissionChecker:
 
     @staticmethod
     def has_permission(user_permissions: list[str], path: str) -> bool:
-        return any(
-            path.startswith(permission)
-            for permission in user_permissions
-        )
+        return any(path.startswith(permission) for permission in user_permissions)

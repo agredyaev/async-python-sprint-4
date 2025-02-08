@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 
 NOT_IMPLEMENTED = "This method should be implemented by subclasses."
 
+
 class BaseConnectionChecker(ABC):
     """Base class for connection checkers."""
 

@@ -9,9 +9,12 @@ from core.connections.base import BaseConnectionChecker
 
 class ServiceWaiter:
     """Wait for service."""
+
     __slots__ = ("checker", "logger", "max_time", "max_tries")
 
-    def __init__(self, checker: BaseConnectionChecker, logger: logging.Logger, max_time: int = 300, max_tries: int = 60):
+    def __init__(
+        self, checker: BaseConnectionChecker, logger: logging.Logger, max_time: int = 300, max_tries: int = 60
+    ):
         self.checker = checker
         self.max_time = max_time
         self.max_tries = max_tries

@@ -2,23 +2,23 @@ from typing import Annotated
 
 from functools import lru_cache
 
-from fastapi import Depends
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from db.postgres import get_pg_session
+from fastapi import Depends
 from interfaces.repositories import RedisRepositoryProtocol
 from repositories import get_redis_repo
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from services.entity import EntityService
 from services.order_service import OrderService
 from services.payment import PaymentService
 from services.product_service import ProductService
 
 __all__: list[str] = [
-    "OrderService",
-    "get_order_service",
     "EntityService",
-    "get_entity_service",
+    "OrderService",
     "ProductService",
+    "get_entity_service",
+    "get_order_service",
     "get_product_service",
 ]
 

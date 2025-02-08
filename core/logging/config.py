@@ -16,10 +16,7 @@ class LogConfig(BaseModel):
     version: int = 1
     disable_existing_loggers: bool = False
     formatters: dict[str, dict[str, Any]] = {
-        "default": {
-            "format": LOG_FORMAT,
-            "datefmt": "%Y-%m-%d %H:%M:%S",
-        },
+        "default": {"format": LOG_FORMAT, "datefmt": "%Y-%m-%d %H:%M:%S"},
         "uvicorn_default": {
             "()": "uvicorn.logging.DefaultFormatter",
             "fmt": "%(levelprefix)s %(message)s",
@@ -31,39 +28,13 @@ class LogConfig(BaseModel):
         },
     }
     handlers: dict[str, dict[str, Any]] = {
-        "default": {
-            "formatter": "default",
-            "class": HANDLER_CLASS,
-            "stream": HANDLER_STREAM,
-        },
-        "uvicorn_default": {
-            "formatter": "uvicorn_default",
-            "class": HANDLER_CLASS,
-            "stream": HANDLER_STREAM,
-        },
-        "uvicorn_access": {
-            "formatter": "uvicorn_access",
-            "class": HANDLER_CLASS,
-            "stream": HANDLER_STREAM,
-        },
+        "default": {"formatter": "default", "class": HANDLER_CLASS, "stream": HANDLER_STREAM},
+        "uvicorn_default": {"formatter": "uvicorn_default", "class": HANDLER_CLASS, "stream": HANDLER_STREAM},
+        "uvicorn_access": {"formatter": "uvicorn_access", "class": HANDLER_CLASS, "stream": HANDLER_STREAM},
     }
     loggers: dict[str, dict[str, Any]] = {
-        "": {
-            "handlers": ["default"],
-            "level": LOG_LEVEL,
-        },
-        "uvicorn": {
-            "handlers": ["uvicorn_default"],
-            "level": "INFO",
-        },
-        "uvicorn.error": {
-            "handlers": ["uvicorn_default"],
-            "level": "INFO",
-        },
-        "uvicorn.access": {
-            "handlers": ["uvicorn_access"],
-            "level": "INFO",
-            "propagate": False,
-        },
+        "": {"handlers": ["default"], "level": LOG_LEVEL},
+        "uvicorn": {"handlers": ["uvicorn_default"], "level": "INFO"},
+        "uvicorn.error": {"handlers": ["uvicorn_default"], "level": "INFO"},
+        "uvicorn.access": {"handlers": ["uvicorn_access"], "level": "INFO", "propagate": False},
     }
-

@@ -1,3 +1,5 @@
+import types
+
 from typing import Protocol
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -5,20 +7,25 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 class UnitOfWorkProtocol(Protocol):
     async def __aenter__(self) -> "AsyncUnitOfWork": ...
-    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None: ...
+    async def __aexit__(
+        self, exc_type: type[BaseException] | None, exc_val: BaseException | None, exc_tb: types.TracebackType | None
+    ) -> None: ...
 
 
 class AsyncUnitOfWork(UnitOfWorkProtocol):
     """Unit of work for async database operations."""
-    def __init__(self, session_factory=AsyncSession):
+
+    def __init__(self, session_factory: type[AsyncSession]) -> None:
         self.session_factory = session_factory
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> "AsyncUnitOfWork":
         self.session = self.session_factory()
         await self.session.begin()
         return self
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
+    async def __aexit__(
+        self, exc_type: type[BaseException] | None, exc_val: BaseException | None, exc_tb: types.TracebackType | None
+    ) -> None:
         if exc_type:
             await self.session.rollback()
         else:
