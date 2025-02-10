@@ -1,0 +1,3 @@
+include:
+- docker/docker-compose.yml
+- services/url_shortener/tests/functional/docker-compose.yml

@@ -1,0 +1,4 @@
+include:
+- docker/docker-compose.yml
+- services/nginx/docker-compose.yml
+- services/url_shortener/docker-compose.yml
