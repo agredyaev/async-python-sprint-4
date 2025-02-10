@@ -11,8 +11,8 @@ class CoreLogger:
     @classmethod
     def setup(cls) -> None:
         """Initialize logging."""
-        log_config = LogConfig().model_dump()
-        config.dictConfig(log_config)
+        log_config = LogConfig()
+        config.dictConfig(log_config.model_dump())
 
     @classmethod
     def get_logger(cls, name: str) -> logging.Logger:

@@ -52,12 +52,12 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 
 async def http_exception_handler(request: Request, exc: HTTPException) -> Response:  # noqa: ARG001
-    logger.error(msg="HTTPException", exc_info=exc)
+    logger.exception(msg="HTTPException", exc_info=exc)
     return ORJSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
 
 
 async def bad_request_exception_handler(request: Request, exc: BadRequestError) -> Response:  # noqa: ARG001
-    logger.error(msg="BadRequestError", exc_info=exc)
+    logger.exception(msg="BadRequestError", exc_info=exc)
     return ORJSONResponse(
         status_code=exc.status_code,
         content={"message": exc.message, "body": exc.body, "errors": [str(error) for error in exc.errors]},
@@ -65,7 +65,7 @@ async def bad_request_exception_handler(request: Request, exc: BadRequestError) 
 
 
 async def generic_exception_handler(request: Request, exc: Exception) -> Response:  # noqa: ARG001
-    logger.error(msg="Unhandled exception", exc_info=exc)
+    logger.exception(msg="Unhandled exception", exc_info=exc)
     return ORJSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content={"message": "Internal Server Error"}
     )

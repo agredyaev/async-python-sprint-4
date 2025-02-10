@@ -20,6 +20,8 @@ class AppSettings(DefaultSettings):
     base_url: str = Field(...)
     health_check_path: str = Field(...)
     app: str = "main:app"
+    debug: bool = Field(...)
+    log_level: str = Field(...)
 
     model_config = SettingsConfigDict(env_prefix="APP_")
 
@@ -43,6 +45,7 @@ class PGSettings(DefaultSettings):
     dsn_local: str = Field(...)
     async_schema: str = Field(...)
     dsn_pg: str = Field(...)
+    echo_sql_queries: bool = True
 
     model_config = SettingsConfigDict(env_prefix="POSTGRES_")
 

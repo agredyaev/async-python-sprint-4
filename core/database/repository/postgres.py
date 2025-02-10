@@ -37,7 +37,9 @@ class BaseRepository(RepositoryProtocol[T, P]):
         result = await self.session.execute(statement)
         return result.scalars().all()
 
-    async def get_by_statement(self, statement: SelectBase) -> P:
+    async def get_by_statement(self, statement: SelectBase | None) -> P | None:
+        if statement is None:
+            return None
         result = await self.session.execute(statement)
         return result.scalar()
 

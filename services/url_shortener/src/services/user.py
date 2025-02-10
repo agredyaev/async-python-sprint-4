@@ -14,10 +14,10 @@ class UserService:
 
     __slots__ = ("_uow", "_user_repo", "authjwt")
 
-    def __init__(self, user_repo: UserRepository, uow: AsyncUnitOfWork):
+    def __init__(self, user_repo: UserRepository, uow: AsyncUnitOfWork, authjwt: AuthJWT):
         self._user_repo = user_repo
         self._uow = uow
-        self.authjwt = AuthJWT()
+        self.authjwt = authjwt
 
     async def _set_cookies(self, sbj: UserTokenGen) -> None:
         access_token = await self.authjwt.create_access_token(subject=sbj.model_dump_json(), fresh=True)
@@ -27,7 +27,7 @@ class UserService:
         async with self._uow:
             if await self._user_repo.get_by_username(user_data.username):
                 raise_error(status_code=status.HTTP_409_CONFLICT, detail="Username already registered")
-            user = User(**user_data.model_dump())
+            user = User(**user_data.model_dump(by_alias=True))
             user = await self._user_repo.upsert(user)
             sbj = UserTokenGen(user_id=user.id)
             await self._set_cookies(sbj)

@@ -1,0 +1,31 @@
+x-default: &default
+  networks:
+  - common
+  env_file:
+  - ../../.env
+  depends_on:
+    python_base:
+      condition: service_completed_successfully
+
+services:
+  url_shortener_app_backend:
+    <<: *default
+    build:
+      context: ../../
+      dockerfile: tests/functional/Dockerfile
+
+
+  url_shortener_postgres:
+    <<: *default
+    image: postgres:17
+    volumes:
+    - url_shortener_pg_data:/var/lib/postgresql/data
+    ports:
+    - 5432:5432
+
+volumes:
+  url_shortener_pg_data:
+
+networks:
+  common:
+    name: common

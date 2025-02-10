@@ -1,5 +1,9 @@
 from enum import IntEnum
 
+from core.logging.logger import CoreLogger
+
+logger = CoreLogger.get_logger("permissions")
+
 
 class PermissionsCheck(IntEnum):
     ENABLED = 1
@@ -16,6 +20,7 @@ class PermissionChecker:
         self.permissions_enabled = permissions_check
 
     def is_exempt(self, path: str) -> bool:
+        logger.info("Checking path %s in exempt list %s", path, self.exempt_endpoints)
         return path in self.exempt_endpoints
 
     @staticmethod

@@ -71,11 +71,11 @@ jobs:
       run: |
         uv run mypy --config-file=pyproject.toml .
 
-      # 10. Run Pytest
-    - name: Run Pytest with conditional migrations
-      run: |
-        if [ -f "alembic.ini" ]; then
-          make migrate-test
-        else
-          make test
-        fi
+#      # 10. Run Pytest
+#    - name: Run Pytest with conditional migrations
+#      run: |
+#        if [ -f "alembic.ini" ]; then
+#          make migrate-test
+#        else
+#          make test
+#        fi

@@ -22,14 +22,14 @@ def get_uow() -> UnitOfWorkProtocol:
 
 @lru_cache
 def get_url_repo(uow: Annotated[AsyncUnitOfWork, Depends(get_uow)]) -> UrlRepository:
-    return UrlRepository(uow.session)
+    return UrlRepository(uow.session_factory())
 
 
 @lru_cache
 def get_url_stats_repo(uow: Annotated[AsyncUnitOfWork, Depends(get_uow)]) -> UrlStatsRepository:
-    return UrlStatsRepository(uow.session)
+    return UrlStatsRepository(uow.session_factory())
 
 
 @lru_cache
 def get_user_repo(uow: Annotated[AsyncUnitOfWork, Depends(get_uow)]) -> UserRepository:
-    return UserRepository(uow.session)
+    return UserRepository(uow.session_factory())

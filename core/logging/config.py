@@ -11,7 +11,7 @@ class LogConfig(BaseModel):
 
     LOGGER_NAME: str = "core"
     LOG_FORMAT: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    LOG_LEVEL: str = "INFO"
+    LOG_LEVEL: str = "DEBUG"
 
     version: int = 1
     disable_existing_loggers: bool = False

@@ -43,8 +43,8 @@ class UrlService:
         async with self._uow:
             url = await self._url_repo.get_by_short_id(url_data.short_id)
             await self._check_url(url)
-            await self._stats_repo.add_visit(url.id, request.headers.get("User-Agent"))
-            return URLOriginalResponse(url.original_url)
+            await self._stats_repo.add_visit(url_id=url.id, client_info=request.headers.get("User-Agent"))
+            return URLOriginalResponse(original_url=url.original_url)
 
     async def update_visibility(self, url_data: UrlVisibilityUpdate) -> UrlResponse:
         async with self._uow:

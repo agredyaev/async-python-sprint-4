@@ -1,6 +1,6 @@
 import uvicorn
 
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
 from api import setup_routers
@@ -8,7 +8,7 @@ from conf.constraits import BLACKLIST, EXEMPT_ENDPOINTS
 from conf.exceptions import register_exception_handlers
 from conf.settings import settings
 from core.logging import CoreLogger
-from core.security import get_auth_service, setup_auth_middleware
+from core.security import setup_auth_middleware
 
 CoreLogger.setup()
 
@@ -18,15 +18,11 @@ app = FastAPI(
     default_response_class=ORJSONResponse,
     docs_url=settings.api.docs_url,
     openapi_url=settings.api.openapi_url,
+    debug=settings.app.debug,
 )
 
-setup_auth_middleware(
-    app=app,
-    auth_service=Depends(get_auth_service),
-    api_version=settings.api.version,
-    exempt_endpoints=EXEMPT_ENDPOINTS,
-    blacklist=BLACKLIST,
-)
+
+setup_auth_middleware(app=app, api_version=settings.api.version, exempt_endpoints=EXEMPT_ENDPOINTS, blacklist=BLACKLIST)
 register_exception_handlers(app=app)
 setup_routers(app=app)
 

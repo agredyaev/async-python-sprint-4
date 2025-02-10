@@ -67,8 +67,15 @@ clean: compose-down
 	- docker system prune -af --volumes || true
 	- docker volume ls -q | xargs -r docker volume rm || true
 	- docker images -q | xargs -r docker rmi || true
+	- find . -type d -name "__pycache__" -exec rm -r {} \+ || true
+
 
 
 .PHONY: compose-up
 compose-up:
 	@docker compose up --build
+
+
+.PHONY: compose-tests
+compose-tests:
+	@docker compose -f docker-compose-tests-functional.yml up --build

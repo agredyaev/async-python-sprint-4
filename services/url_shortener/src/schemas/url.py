@@ -1,10 +1,13 @@
+from typing import Annotated
+
 from datetime import datetime
-from enum import StrEnum, auto
+from enum import IntEnum, StrEnum, auto
 from uuid import UUID
 
-import shortuuid
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl
+from pydantic.functional_serializers import PlainSerializer
 
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator
+FancyUrl = Annotated[HttpUrl, PlainSerializer(lambda x: str(x), return_type=str)]
 
 
 class UrlVisibility(StrEnum):
@@ -12,8 +15,13 @@ class UrlVisibility(StrEnum):
     private = auto()
 
 
+class UrlStatsInfo(IntEnum):
+    full = 1
+    short = 2
+
+
 class UserIdMixIn(BaseModel):
-    user_id: UUID | None = Field(None, description="User ID")
+    user_id: UUID | None = Field(default=None, description="User ID from JWT")
 
 
 class VisibilityMixIn(BaseModel):
@@ -25,23 +33,15 @@ class ShortUrlIdMixIn(BaseModel):
 
 
 class OriginalUrlMixIn(BaseModel):
-    original_url: HttpUrl = Field(..., pattern="^https?://", description="Original URL to shorten")
+    original_url: FancyUrl = Field(..., description="Original URL to shorten")
+
+    model_config = ConfigDict(from_attributes=True)
 
 
-class UrlCreate(VisibilityMixIn, OriginalUrlMixIn, UserIdMixIn):
-    short_id: str | None = Field(None, max_length=8, description="Generated short URL ID")
-
-    @field_validator("short_id", mode="before")
-    @classmethod
-    def generate_short_id(cls, value: str | None) -> str:
-        if not value:
-            return shortuuid.ShortUUID().random(length=8)
-        return value
+class UrlCreate(VisibilityMixIn, OriginalUrlMixIn, UserIdMixIn): ...
 
 
 class UrlResponse(VisibilityMixIn, ShortUrlIdMixIn, OriginalUrlMixIn):
-    short_url: str = Field(..., description="Shortened URL")
-
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -53,14 +53,14 @@ class UrlStatsResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-class URLOriginalGet(ShortUrlIdMixIn, UserIdMixIn): ...
+class URLOriginalGet(ShortUrlIdMixIn): ...
 
 
 class URLOriginalResponse(OriginalUrlMixIn): ...
 
 
 class UrlStatsParams(BaseModel):
-    full_info: bool = False
+    full_info: UrlStatsInfo = UrlStatsInfo.short
     max_results: int = 10
     offset: int = 0
 

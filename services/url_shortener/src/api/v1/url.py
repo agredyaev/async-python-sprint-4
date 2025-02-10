@@ -9,6 +9,7 @@ from schemas.url import (
     URLOriginalGet,
     URLOriginalResponse,
     UrlResponse,
+    UrlStatsInfo,
     UrlStatsReq,
     UrlStatsResponse,
     UrlVisibilityUpdate,
@@ -26,12 +27,12 @@ async def create_url(
     return await service.create_url(url_data=data)
 
 
-@router.get("/", summary="Get original URL", description="Get original URL", status_code=status.HTTP_200_OK)
+@router.get("", summary="Get original URL", description="Get original URL", status_code=status.HTTP_200_OK)
 async def get_url(
-    request: Request, data: URLOriginalGet, service: Annotated[UrlService, Depends(get_url_service)]
+    request: Request, short_id: str, service: Annotated[UrlService, Depends(get_url_service)]
 ) -> URLOriginalResponse:
-    data.user_id = request.state.user_id
-    return await service.get_url(url_data=data)
+    data = URLOriginalGet(short_id=short_id)
+    return await service.get_url(url_data=data, request=request)
 
 
 @router.get("/list", summary="Get user URLs", description="Get user URLs", status_code=status.HTTP_200_OK)
@@ -50,6 +51,11 @@ async def update_visibility(
 
 @router.get("/stats", summary="Get URL stats", description="Get URL stats", status_code=status.HTTP_200_OK)
 async def get_url_stats(
-    data: UrlStatsReq, service: Annotated[UrlService, Depends(get_url_service)]
+    short_id: str,
+    service: Annotated[UrlService, Depends(get_url_service)],
+    full_info: UrlStatsInfo = UrlStatsInfo.short,
+    max_results: int = 10,
+    offset: int = 0,
 ) -> UrlStatsResponse:
+    data = UrlStatsReq(short_id=short_id, full_info=full_info, max_results=max_results, offset=offset)
     return await service.get_url_stats(url_data=data)

@@ -18,11 +18,13 @@ services:
   url_shortener_app_backend:
     <<: *default
     build: .
-    ports:
-    - ${APP_PORT}:${APP_PORT}
     depends_on:
       url_shortener_postgres:
         condition: service_healthy
+    healthcheck:
+      test: [CMD-SHELL, 'curl --fail http://localhost:${APP_PORT}${APP_ROOT_PATH}/api/v1/check || exit 1']
+    expose:
+    - ${APP_PORT}
 
   url_shortener_postgres:
     <<: *default
@@ -32,6 +34,8 @@ services:
       <<: *default-healthcheck
     volumes:
     - url_shortener_pg_data:/var/lib/postgresql/data
+    expose:
+    - ${POSTGRES_PORT}
     ports:
     - ${POSTGRES_PORT}:${POSTGRES_PORT}
 

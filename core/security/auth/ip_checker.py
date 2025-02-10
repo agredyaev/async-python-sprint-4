@@ -1,10 +1,12 @@
+from typing import Any
+
 import ipaddress
 
 from pydantic import BaseModel, field_validator
 
 
 class NetworkConfig(BaseModel):
-    blacklist: list[str]
+    blacklist: Any
 
     @field_validator("blacklist", mode="before")
     @classmethod
@@ -16,7 +18,7 @@ class IPChecker:
     __slots__ = ("networks",)
 
     def __init__(self, config: NetworkConfig):
-        self.networks: list[ipaddress.IPv4Network | ipaddress.IPv6Network] = config.blacklist  # type: ignore[assignment]
+        self.networks: list[ipaddress.IPv4Network | ipaddress.IPv6Network] = config.blacklist
 
     def is_blocked(self, ip: str) -> bool:
         client_ip: ipaddress.IPv4Address | ipaddress.IPv6Address = ipaddress.ip_address(ip)

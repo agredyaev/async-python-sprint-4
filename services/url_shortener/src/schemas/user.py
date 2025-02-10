@@ -10,7 +10,10 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 class UserCredentialsMixin(BaseModel):
     username: str = Field(..., min_length=5, description="Username must be at least 5 characters")
     password: str = Field(
-        ..., min_length=8, description="Password must be at least 8 characters", alias="hashed_password"
+        ...,
+        min_length=8,
+        description="Password must be at least 8 characters. Hashed during validation",
+        alias="hashed_password",
     )
 
 
