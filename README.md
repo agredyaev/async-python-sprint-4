@@ -13,7 +13,7 @@
 ![Pydantic](https://img.shields.io/badge/Pydantic-red?logo=pydantic&logoColor=white)
 
 ---
-Modern URL shortening microservice with analytics and user management. Built with FastAPI, Postgres, and Redis, containerized with Docker.
+Modern URL shortening microservice with analytics and user management. Built with FastAPI, Postgres, containerized with Docker.
 
 ---
 ## Key Features
