@@ -5,6 +5,8 @@ workers = 2
 threads = 4
 worker_class = "uvicorn.workers.UvicornWorker"
 
-loglevel = "debug"
+loglevel = "info"
 accesslog = "-"
 errorlog = "-"
+
+capture_output = True

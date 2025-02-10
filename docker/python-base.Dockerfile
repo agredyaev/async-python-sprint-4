@@ -11,13 +11,12 @@ ENV GID=1000 \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     # path
-    BASE_PATH=/opt/app \
-    # uv
-    UV_COMPILE_BYTECODE=1 \
-    UV_SYSTEM_PYTHON=1
+    BASE_PATH=/opt/app
 
 # Set python path
 ENV PYTHONPATH="$BASE_PATH":"$BASE_PATH"/tests
+ENV PYTHONPATH="$BASE_PATH":"$BASE_PATH"/.venv/bin
+ENV PATH=""$BASE_PATH"/.venv/bin:$PATH"
 
 # Set work directory
 WORKDIR "$BASE_PATH"
@@ -26,7 +25,10 @@ WORKDIR "$BASE_PATH"
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 # Copy common files
-COPY ./useradd.sh ./useradd.sh
+COPY pyproject.toml uv.lock ./
+COPY ./core ./core
+COPY ./services/url_shortener/pyproject.toml ./services/url_shortener/pyproject.toml
+COPY ./docker/useradd.sh ./useradd.sh
 RUN chmod +x ./useradd.sh
 
 # Initialize

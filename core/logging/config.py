@@ -19,7 +19,7 @@ class LogConfig(BaseModel):
         "default": {"format": LOG_FORMAT, "datefmt": "%Y-%m-%d %H:%M:%S"},
         "uvicorn_default": {
             "()": "uvicorn.logging.DefaultFormatter",
-            "fmt": "%(levelprefix)s %(message)s",
+            "fmt": "%(asctime)s - %(levelname)s - %(message)s",
             "use_colors": True,
         },
         "uvicorn_access": {

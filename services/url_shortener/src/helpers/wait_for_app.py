@@ -1,7 +1,6 @@
 import asyncio
 
 from conf.settings import settings
-
 from core.connections import AppConnectionChecker
 from core.logging import CoreLogger
 from core.services.waiter import ServiceWaiter

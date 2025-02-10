@@ -1,10 +1,10 @@
 FROM python-base:0.1.0 AS base
 
-# Install project dependencies
-COPY pyproject.toml .
-RUN uv pip install --system --no-cache-dir -r pyproject.toml
-
 ARG USERNAME=url_shortener
+
+# Install project dependencies
+RUN uv sync --package url_shortener --frozen
+
 
 # Copy application code
 COPY ./src ./

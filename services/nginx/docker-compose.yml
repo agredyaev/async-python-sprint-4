@@ -5,6 +5,8 @@ x-default: &default
   depends_on:
     python_base:
       condition: service_completed_successfully
+    url_shortener_app_backend:
+      condition: service_completed_successfully
 
 
 services:
@@ -17,7 +19,6 @@ services:
     - ./configs/config:/etc/nginx/conf.d:ro
     ports:
     - 80:80
-
 
 networks:
   common:

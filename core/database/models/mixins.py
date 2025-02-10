@@ -24,6 +24,12 @@ class CreatedAtMixin(BaseMixin):
     created_at: Mapped[DATETIME_WITH_TIMEZONE] = mapped_column(default=get_timestamp, nullable=False)
 
 
+class AccessedAtMixin(BaseMixin):
+    """Mixin that adds a timestamp field to a model."""
+
+    accessed_at: Mapped[DATETIME_WITH_TIMEZONE] = mapped_column(default=get_timestamp, nullable=False)
+
+
 class UpdatedAtMixin(BaseMixin):
     """Mixin that adds a timestamp field to a model."""
 

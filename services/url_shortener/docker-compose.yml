@@ -1,45 +1,43 @@
 x-default: &default
   restart: unless-stopped
   networks:
-  - ${NETWORK_NAME}
+  - common
   env_file:
   - .env
   depends_on:
     python_base:
       condition: service_completed_successfully
 
-x-service-prefix: &prefix ${SERVICE_PREFIX}
+x-healthcheck: &default-healthcheck
+  interval: 30s
+  timeout: 10s
+  retries: 5
+  start_period: 30s
 
 services:
-  app_backend:
+  url_shortener_app_backend:
     <<: *default
     build: .
-    container_name: << *prefix >>_app_backend
     ports:
     - ${APP_PORT}:${APP_PORT}
     depends_on:
-      postgres:
+      url_shortener_postgres:
         condition: service_healthy
 
-  postgres:
+  url_shortener_postgres:
     <<: *default
     image: postgres:${POSTGRES_VERSION}
-    container_name: << *prefix >>_postgres
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     healthcheck:
-      test: [CMD-SHELL, 'pg_isready -U ${DB_USER}']
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      test: [CMD-SHELL, "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}' || exit 1"]
+      <<: *default-healthcheck
     volumes:
-    - << *prefix >>_data_pg:/var/lib/postgresql/data
+    - url_shortener_pg_data:/var/lib/postgresql/data
+    ports:
+    - ${POSTGRES_PORT}:${POSTGRES_PORT}
 
 volumes:
-  << *prefix >>_data_pg:
+  url_shortener_pg_data:
 
 networks:
-  << *prefix >>_network:
-    name: ${NETWORK_NAME}
+  common:
+    name: common

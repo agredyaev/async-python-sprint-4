@@ -17,8 +17,9 @@ class AppSettings(DefaultSettings):
     host: str = Field(...)
     port: int = Field(...)
     root_path: str = Field(...)
-    base_url: str = "http://billing_app_backend:8075"
-    health_check_path: str = "/billing/api/v1/check"
+    base_url: str = Field(...)
+    health_check_path: str = Field(...)
+    app: str = "main:app"
 
     model_config = SettingsConfigDict(env_prefix="APP_")
 
@@ -27,7 +28,7 @@ class ApiSettings(DefaultSettings):
     docs_url: str = Field(...)
     openapi_url: str = Field(...)
     version: str = Field(...)
-    results_callback_url: str = Field(...)
+    blacklist: str = Field(...)
 
     model_config = SettingsConfigDict(env_prefix="API_")
 
@@ -47,9 +48,7 @@ class PGSettings(DefaultSettings):
 
 
 class Auth(DefaultSettings):
-    access_name: str = Field(...)
-    refresh_name: str = Field(...)
-    url_user: str = Field(...)
+    max_age: int = Field(default=60 * 5, description="Max age of tokens in seconds")
 
     model_config = SettingsConfigDict(env_prefix="AUTH_")
 
@@ -70,8 +69,6 @@ class JWTSettings(DefaultSettings):
     authjwt_token_location: set[str] = {"cookies"}
     authjwt_cookie_csrf_protect: bool = False
     authjwt_access_token_expires: int = Field(...)
-    authjwt_access_cookie_key: str = Field(...)
-    authjwt_refresh_cookie_key: str = Field(...)
 
     model_config = SettingsConfigDict(env_prefix="JWT_")
 
@@ -83,7 +80,6 @@ class Settings(DefaultSettings):
     pg: PGSettings = PGSettings()
     auth: Auth = Auth()
     backoff: BackoffSettings = BackoffSettings()
-    jwt: JWTSettings = JWTSettings()
 
 
 settings = Settings()

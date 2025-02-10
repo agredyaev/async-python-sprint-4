@@ -1,6 +1,7 @@
 from typing import Any, TypeVar
 
 from collections.abc import Sequence
+from uuid import UUID
 
 from sqlalchemy import SelectBase
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -26,7 +27,7 @@ class BaseRepository(RepositoryProtocol[T, P]):
         await self.session.refresh(obj)
         return obj
 
-    async def get(self, obj: T) -> P | None:
+    async def get(self, obj: UUID) -> P | None:
         return await self.session.get(self.model, obj)
 
     async def get_all(self, statement: SelectBase | None) -> Sequence[P]:

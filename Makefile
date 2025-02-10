@@ -53,3 +53,22 @@ migrate:
 
 .PHONY: migrate-test
 migrate-test: migrate test
+
+
+
+.PHONY: compose-down
+compose-down:
+	@docker compose down -v
+
+.PHONY: clean
+clean: compose-down
+	- docker ps -q | xargs -r docker stop || true
+	- docker ps -a -q | xargs -r docker rm || true
+	- docker system prune -af --volumes || true
+	- docker volume ls -q | xargs -r docker volume rm || true
+	- docker images -q | xargs -r docker rmi || true
+
+
+.PHONY: compose-up
+compose-up:
+	@docker compose up --build

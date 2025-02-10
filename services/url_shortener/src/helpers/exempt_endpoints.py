@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel
 
-from core.settings import settings as config
+from conf.settings import settings as config
 
 
 class ExemptEndpoints(BaseModel):

@@ -9,8 +9,8 @@ PG_PID=$!
 
 wait $PG_PID
 
-echo "Starting billing service..."
-
+echo "Migrating database..."
 alembic upgrade head
 
+echo "Starting service..."
 gunicorn -c gunicorn_conf.py main:app
