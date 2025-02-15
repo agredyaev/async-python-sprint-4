@@ -15,7 +15,6 @@ alembic upgrade head
 echo "Starting service in background..."
 gunicorn -c gunicorn_conf.py main:app --daemon
 
-
 echo "Waiting for service to start..."
 sleep 5
 

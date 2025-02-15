@@ -72,10 +72,10 @@ clean: compose-down
 
 
 .PHONY: compose-up
-compose-up:
+compose-up: env
 	@docker compose up --build
 
 
 .PHONY: compose-tests
-compose-tests:
+compose-tests: env
 	@docker compose -f docker-compose-tests-functional.yml up --build
