@@ -7,7 +7,13 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
 
 from core.logging.logger import CoreLogger
-from core.security.auth.exceptions import AuthJWTError, BlacklistError, InternalServerError, PermissionDeniedError
+from core.security.auth.exceptions import (
+    AuthenticationError,
+    AuthJWTError,
+    BlacklistError,
+    InternalServerError,
+    PermissionDeniedError,
+)
 from core.security.auth.ip_checker import IPChecker, NetworkConfig
 from core.security.auth.permissions import PermissionChecker
 from core.security.auth.schemas import UserId
@@ -56,7 +62,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
                 request.state.user_id = UserId.model_validate_json(json_data=user_id).user_id
                 logger.info("User: %s", current_user)
 
-            except Exception as e:
+            except AuthenticationError as e:
                 logger.exception("Failed to authenticate user", exc_info=e)
                 return self.handle_error(exc=InternalServerError())
 

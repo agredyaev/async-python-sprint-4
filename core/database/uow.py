@@ -2,14 +2,19 @@ import types
 
 from typing import Protocol
 
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+
+from core.logging.logger import CoreLogger
+
+logger = CoreLogger.get_logger("unit_of_database_work")
 
 
 class UnitOfWorkProtocol(Protocol):
     async def __aenter__(self) -> "AsyncUnitOfWork": ...
     async def __aexit__(
         self, exc_type: type[BaseException] | None, exc_val: BaseException | None, exc_tb: types.TracebackType | None
-    ) -> None: ...
+    ) -> bool | None: ...
 
 
 class AsyncUnitOfWork(UnitOfWorkProtocol):
@@ -26,10 +31,21 @@ class AsyncUnitOfWork(UnitOfWorkProtocol):
 
     async def __aexit__(
         self, exc_type: type[BaseException] | None, exc_val: BaseException | None, exc_tb: types.TracebackType | None
-    ) -> None:
-        if self.session is not None:
+    ) -> bool | None:
+        result = False
+        if self.session is None:
+            return result
+        try:
             if exc_type:
                 await self.session.rollback()
             else:
                 await self.session.commit()
+            result = True
+        except SQLAlchemyError as e:
+            await self.session.rollback()
+            logger.exception("Database error: %s", exc_info=e)
+            result = False
+        finally:
             await self.session.close()
+
+        return result
